@@ -26,7 +26,7 @@ namespace headsetcontrol {
  *
  * Special Requirements:
  * - 15-packet initialization sequence followed by 6 status requests
- * - 60ms delay between packets (official software sends at 52ms but 60ms is more reliable in testing)
+ * - 100ms delay between packets (official software sends at 52ms but 100ms is more reliable in testing)
  * - Uses hid_get_input_report for responses
  */
 class AudezeMaxwell : public HIDDevice {
@@ -38,7 +38,7 @@ public:
 
     static constexpr int MSG_SIZE  = 62;
     static constexpr int REPORT_ID = 0x06;
-    static constexpr int DELAY_US  = 60000; // 60ms
+    static constexpr int DELAY_US  = 100000; // 100ms
 
     // 15-packet initialization sequence
     static constexpr std::array<std::array<uint8_t, MSG_SIZE>, 15> UNIQUE_REQUESTS { { { 0x06, 0x08, 0x80, 0x05, 0x5A, 0x04, 0x00, 0x01, 0x09, 0x20 },
@@ -101,9 +101,9 @@ public:
 
 private:
     /**
-     * @brief Send request and get input report with 60ms delay
+     * @brief Send request and get input report with 100ms delay
      *
-     * Audeze HQ sends packets at ~60ms intervals. Sending too quickly causes issues.
+     * Audeze HQ sends packets at ~100ms intervals. Sending too quickly causes issues.
      */
     Result<void> sendGetInputReport(hid_device* device_handle, std::span<const uint8_t> data, std::span<uint8_t> buff = {}) const
     {
